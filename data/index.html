@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>LED RGB</title>
+    <meta charset="UTF-8">
+    <script src="iro.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="script.js"></script>
+    <link rel="icon" type="image/x-icon" href="favicon.ico"></head>
+
+<body onload="runScript()">
+
+    <div id="root">
+        <div>
+            <h1 class="status" id="status"></h1>
+        </div>
+        <br class="line">
+        <div class="wrap">
+            <div class="colorPicker"></div>
+        </div>
+        <br class="line">
+        <div class="slidecontainer">
+            <form>
+                <label for="timeSlider">
+                    <h1><output name="" id="sliderValue">VELOCIDADE: 0</output></h1>
+                </label>
+                <input type="range" id="timeSlider" min="0" max="10000" step="100" value="0" class="slider" onchange="console.log(this.value)" oninput="sliderValue.value = 'VELOCIDADE: ' + timeSlider.value">
+            </form>
+        </div>
+        <br class="line">
+        <div class="colorSelector">
+            <input type="button" class="dot" style="background-color:#000000" onclick="setBtnColor(this)">
+            <input type="button" class="dot" style="background-color:#ff0000" onclick="setBtnColor(this)">
+            <input type="button" class="dot" style="background-color:#ffff00" onclick="setBtnColor(this)">
+            <input type="button" class="dot" style="background-color:#00ff00" onclick="setBtnColor(this)">
+            <br>
+            <input type="button" class="dot" style="background-color:#ffffff" onclick="setBtnColor(this)">
+            <input type="button" class="dot" style="background-color:#00ffff" onclick="setBtnColor(this)">
+            <input type="button" class="dot" style="background-color:#0000ff" onclick="setBtnColor(this)">
+            <input type="button" class="dot" style="background-color:#ff00ff" onclick="setBtnColor(this)">
+        </div>
+    </div>
+</body>
+
+</html>
