@@ -1,17 +1,15 @@
 #include <ArduinoWebsockets.h>
 #include <ESP8266WiFi.h>
 #include <ESP8266mDNS.h>
+#include <ArduinoOTA.h>
 
 #include "Arduino.h"
 #include "wsServer.h"
 #include "webServer.h"
 
-// using namespace websockets;
+const char *ssid = WIFI_SSID;     // Enter SSID
+const char *password = WIFI_PASS; // Enter Password
 
-// WebsocketsServer server;
-
-const char *ssid = "SSID";         // Enter SSID
-const char *password = "PASSWORD"; // Enter Password
 const char *mdnsHost = "ledRgb";
 
 static struct led
@@ -40,31 +38,30 @@ void setup()
   delay(100);
 
   WiFi.begin(ssid, password);
-  // for (int i = 0; i < 15 && WiFi.status() != WL_CONNECTED; i++) {
-  //   Serial.print(".");
-  //   delay(1000);
-  // }
 
   initColors();
   yield();
   initWsServer();
   yield();
   initWebServer();
+  yield();
+
+  ArduinoOTA.setPort(82);
+  ArduinoOTA.begin(false);
 
   gotIpEventHandler = WiFi.onStationModeGotIP([](const WiFiEventStationModeGotIP &event) {
-    Serial.print("Station connected: ");
+    Serial.printf("Connected(RSSI=%d, CH=%d, BSSID=%s, IP=%s)\n", WiFi.RSSI(), WiFi.channel(), WiFi.BSSIDstr().c_str(), WiFi.localIP().toString().c_str());
     if (MDNS.begin(mdnsHost))
     {
       MDNS.addService("http", "tcp", 80);
       MDNS.addService("ws", "tcp", 81);
-      Serial.print(F("Open http://"));
-      Serial.print(mdnsHost);
-      Serial.println(F(".local"));
+      MDNS.enableArduino(82);
+      Serial.printf("Open http://%s.local\n", mdnsHost);
     }
   });
 
   disconnectedEventHandler = WiFi.onStationModeDisconnected([](const WiFiEventStationModeDisconnected &event) {
-    Serial.println("Station disconnected");
+    Serial.println("Disconnected");
   });
 }
 
@@ -77,6 +74,8 @@ void loop()
     loopWebServer();
     yield();
     loopWsServer();
+    yield();
+    ArduinoOTA.handle();
     yield();
     MDNS.update();
   }

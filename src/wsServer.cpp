@@ -25,7 +25,7 @@
 #include <tiny_websockets/server.hpp>
 #include <vector>
 
-extern void setHtmlHexColor(const char* hexColor);
+extern void setHtmlHexColor(const char *hexColor);
 extern uint32_t getColor();
 
 using namespace websockets;
@@ -34,19 +34,24 @@ using namespace websockets;
 std::vector<WebsocketsClient> allClients;
 String lastColor;
 bool sendColor = false;
-WebsocketsClient* senderColor = nullptr;
+WebsocketsClient *senderColor = nullptr;
 
 WebsocketsServer wsServer;
 
 // this method goes thrugh every client and polls for new messages and events
-void pollAllClients() {
-  for (auto& client : allClients) {
+void pollAllClients()
+{
+  for (auto &client : allClients)
+  {
     client.poll();
   }
 
-  for (auto& client : allClients) {
-    if (sendColor) {
-      if ((WebsocketsClient*)&client != senderColor) {
+  for (auto &client : allClients)
+  {
+    if (sendColor)
+    {
+      if ((WebsocketsClient *)&client != senderColor)
+      {
         client.send(lastColor.c_str());
       }
     }
@@ -54,39 +59,54 @@ void pollAllClients() {
   sendColor = false;
 }
 
-// this callback is common for all clients, the client that sent that
-// message is the one that gets the echo response
-void onMessage(WebsocketsClient& client, WebsocketsMessage message) {
-  // std::cout << "Got Message: `" << message.data() << "`, Sending Echo." <<
-  // std::endl;
-  String newColor = message.data();
-  senderColor = &client;
-  if (newColor != lastColor) {
-    setHtmlHexColor(newColor.c_str());
-    lastColor = newColor;
+void colorToSend(WebsocketsClient *client, String color)
+{
+  if (!client || (color != lastColor))
+  {
+    if (client)
+    {
+      setHtmlHexColor(color.c_str());
+    }
+    lastColor = color;
     sendColor = true;
+    senderColor = client;
   }
 }
 
-int initWsServer() {
+// this callback is common for all clients, the client that sent that
+// message is the one that gets the echo response
+void onMessage(WebsocketsClient &client, WebsocketsMessage message)
+{
+  colorToSend(&client, message.data());
+}
+
+int initWsServer()
+{
   wsServer.listen(SERVER_PORT);
   return 0;
 }
 
-void loopWsServer(void) {
+String CurrentColor()
+{
+  char color[8];
+  snprintf(color, 8, "#%06x", getColor());
+  return color;
+}
+
+void loopWsServer(void)
+{
   // while the server is alive
-  if (wsServer.available()) {
+  if (wsServer.available())
+  {
     // if there is a client that wants to connect
-    if (wsServer.poll()) {
+    if (wsServer.poll())
+    {
       // accept the connection and register callback
-      // std::cout << "Accepting a new client!" << std::endl;
       WebsocketsClient client = wsServer.accept();
       client.onMessage(onMessage);
-      char color[8];
-      snprintf(color, 8, "#%06x", getColor());
-      lastColor = color;
-      sendColor = true;
-      senderColor = nullptr;
+
+      colorToSend(NULL, CurrentColor());
+
       // store it for later use
       allClients.push_back(client);
     }
