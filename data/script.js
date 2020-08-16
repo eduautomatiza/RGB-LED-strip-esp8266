@@ -45,10 +45,10 @@ var onOpen = function(event) {
 var createInterface = function() {
     if (!colorPicker) {
         colorPicker = new iro.ColorPicker(".colorPicker", {
-            width: 720,
-            borderWidth: 5,
+            width: 300,
+            borderWidth: 2,
             borderColor: "#fff",
-            handleRadius: 50
+            handleRadius: 20
         });
 
         colorPicker.on(["input:change"], syncColor);

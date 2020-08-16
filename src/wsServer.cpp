@@ -17,8 +17,6 @@
   message.data()`
 */
 
-#define SERVER_PORT 81
-
 #include <iostream>
 #include <string>
 #include <tiny_websockets/client.hpp>
@@ -39,19 +37,14 @@ WebsocketsClient *senderColor = nullptr;
 WebsocketsServer wsServer;
 
 // this method goes thrugh every client and polls for new messages and events
-void pollAllClients()
-{
-  for (auto &client : allClients)
-  {
+void pollAllClients() {
+  for (auto &client : allClients) {
     client.poll();
   }
 
-  for (auto &client : allClients)
-  {
-    if (sendColor)
-    {
-      if ((WebsocketsClient *)&client != senderColor)
-      {
+  for (auto &client : allClients) {
+    if (sendColor) {
+      if ((WebsocketsClient *)&client != senderColor) {
         client.send(lastColor.c_str());
       }
     }
@@ -59,12 +52,9 @@ void pollAllClients()
   sendColor = false;
 }
 
-void colorToSend(WebsocketsClient *client, String color)
-{
-  if (!client || (color != lastColor))
-  {
-    if (client)
-    {
+void colorToSend(WebsocketsClient *client, String color) {
+  if (!client || (color != lastColor)) {
+    if (client) {
       setHtmlHexColor(color.c_str());
     }
     lastColor = color;
@@ -75,32 +65,26 @@ void colorToSend(WebsocketsClient *client, String color)
 
 // this callback is common for all clients, the client that sent that
 // message is the one that gets the echo response
-void onMessage(WebsocketsClient &client, WebsocketsMessage message)
-{
+void onMessage(WebsocketsClient &client, WebsocketsMessage message) {
   colorToSend(&client, message.data());
 }
 
-int initWsServer()
-{
-  wsServer.listen(SERVER_PORT);
+int initWsServer(uint16_t ws_port) {
+  wsServer.listen(ws_port);
   return 0;
 }
 
-String CurrentColor()
-{
+String CurrentColor() {
   char color[8];
   snprintf(color, 8, "#%06x", getColor());
   return color;
 }
 
-void loopWsServer(void)
-{
+void loopWsServer(void) {
   // while the server is alive
-  if (wsServer.available())
-  {
+  if (wsServer.available()) {
     // if there is a client that wants to connect
-    if (wsServer.poll())
-    {
+    if (wsServer.poll()) {
       // accept the connection and register callback
       WebsocketsClient client = wsServer.accept();
       client.onMessage(onMessage);

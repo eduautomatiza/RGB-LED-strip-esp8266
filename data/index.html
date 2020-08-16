@@ -12,8 +12,7 @@
 <body onload="runScript()">
 
     <div id="root">
-        <div>
-            <h1 class="status" id="status"></h1>
+        <div class="status" id="status"></h1>
         </div>
         <br class="line">
         <div class="wrap">
@@ -22,10 +21,8 @@
         <br class="line">
         <div class="slidecontainer">
             <form>
-                <label for="timeSlider">
-                    <h1><output name="" id="sliderValue">VELOCIDADE: 0</output></h1>
-                </label>
-                <input type="range" id="timeSlider" min="0" max="10000" step="100" value="0" class="slider" onchange="console.log(this.value)" oninput="sliderValue.value = 'VELOCIDADE: ' + timeSlider.value">
+                <div name="" id="sliderValue">VELOCIDADE: 0</div>
+                <input type="range" id="timeSlider" min="0" max="10000" step="100" value="0" class="slider" onchange="console.log(this.value)" oninput="sliderValue.innerText = 'VELOCIDADE: ' + timeSlider.value">
             </form>
         </div>
         <br class="line">
