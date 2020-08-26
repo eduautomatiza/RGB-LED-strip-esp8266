@@ -52,4 +52,4 @@ void initWebServer(uint16_t http_port) {
   server.begin();
 }
 
-void loopWebServer(void) { server.handleClient(); }
+void handleWebServer(void) { server.handleClient(); }

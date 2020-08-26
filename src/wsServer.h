@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include "stripLedRgb.h"
 
-void initWsServer(uint16_t ws_port);
-void loopWsServer(void);
+int initWsServer(uint16_t ws_port,stripLedRgb *leds);
+void handleWsServer(void);

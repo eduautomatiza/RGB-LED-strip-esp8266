@@ -1,43 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <title>LED RGB</title>
-    <meta charset="UTF-8">
+    <meta
+      charset="UTF-8"
+      name="viewport"
+      content="width=device-width, initial-scale=1"
+    />
     <script src="iro.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="script.js"></script>
-    <link rel="icon" type="image/x-icon" href="favicon.ico"></head>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
 
-<body onload="runScript()">
-
+  <body onload="runScript()">
     <div id="root">
-        <div class="status" id="status"></h1>
-        </div>
-        <br class="line">
-        <div class="wrap">
-            <div class="colorPicker"></div>
-        </div>
-        <br class="line">
-        <div class="slidecontainer">
-            <form>
-                <div name="" id="sliderValue">VELOCIDADE: 0</div>
-                <input type="range" id="timeSlider" min="0" max="10000" step="100" value="0" class="slider" onchange="console.log(this.value)" oninput="sliderValue.innerText = 'VELOCIDADE: ' + timeSlider.value">
-            </form>
-        </div>
-        <br class="line">
-        <div class="colorSelector">
-            <input type="button" class="dot" style="background-color:#000000" onclick="setBtnColor(this)">
-            <input type="button" class="dot" style="background-color:#ff0000" onclick="setBtnColor(this)">
-            <input type="button" class="dot" style="background-color:#ffff00" onclick="setBtnColor(this)">
-            <input type="button" class="dot" style="background-color:#00ff00" onclick="setBtnColor(this)">
-            <br>
-            <input type="button" class="dot" style="background-color:#ffffff" onclick="setBtnColor(this)">
-            <input type="button" class="dot" style="background-color:#00ffff" onclick="setBtnColor(this)">
-            <input type="button" class="dot" style="background-color:#0000ff" onclick="setBtnColor(this)">
-            <input type="button" class="dot" style="background-color:#ff00ff" onclick="setBtnColor(this)">
-        </div>
+      <div class="status" id="status"></div>
+      <br class="line" />
+      <div class="wrap">
+        <div class="colorPicker"></div>
+      </div>
+      <br class="line" />
+      <div class="slidecontainer">
+        <form>
+          <div>
+            <label for="timeSlider">Time Step</label>
+            <input type="range" id="timeSlider" class="slider" />
+          </div>
+          <div>
+            <label for="angleSlider">Angle Step</label>
+            <input type="range" id="angleSlider" class="slider" />
+          </div>
+          <div>
+            <label for="dutySlider">Duty Cycle</label>
+            <input type="range" id="dutySlider" class="slider" />
+          </div>
+        </form>
+      </div>
+      <br class="line" />
+      <div class="colorSelector">
+        <input
+          type="button"
+          class="dot"
+          style="background-color: #000000;"
+          onclick="setBtnColor(this)"
+        />
+        <input
+          type="button"
+          class="dot"
+          style="background-color: #ff0000;"
+          onclick="setBtnColor(this)"
+        />
+        <input
+          type="button"
+          class="dot"
+          style="background-color: #ffff00;"
+          onclick="setBtnColor(this)"
+        />
+        <input
+          type="button"
+          class="dot"
+          style="background-color: #00ff00;"
+          onclick="setBtnColor(this)"
+        />
+        <br />
+        <input
+          type="button"
+          class="dot"
+          style="background-color: #ffffff;"
+          onclick="setBtnColor(this)"
+        />
+        <input
+          type="button"
+          class="dot"
+          style="background-color: #00ffff;"
+          onclick="setBtnColor(this)"
+        />
+        <input
+          type="button"
+          class="dot"
+          style="background-color: #0000ff;"
+          onclick="setBtnColor(this)"
+        />
+        <input
+          type="button"
+          class="dot"
+          style="background-color: #ff00ff;"
+          onclick="setBtnColor(this)"
+        />
+      </div>
     </div>
-</body>
-
+  </body>
 </html>
