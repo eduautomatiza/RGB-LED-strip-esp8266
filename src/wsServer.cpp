@@ -8,11 +8,10 @@
 #include <vector>
 
 #include "ArduinoJson.h"
-using namespace websockets;
 
 // a collection of all connected clients
-std::vector<WebsocketsClient> allClients;
-WebsocketsServer wsServer;
+std::vector<websockets::WebsocketsClient> allClients;
+websockets::WebsocketsServer wsServer;
 stripLedRgb *_leds;
 
 #define StaticJsonDocument_length 256
@@ -20,11 +19,11 @@ static StaticJsonDocument<StaticJsonDocument_length> doc;
 
 // this method goes thrugh every client and polls for new messages and events
 void pollAllClients();
-void sendConfig(WebsocketsClient *client);
+void sendConfig(websockets::WebsocketsClient *client);
 
 // this callback is common for all clients, the client that sent that
 // message is the one that gets the echo response
-void onMessage(WebsocketsClient &client, WebsocketsMessage message) {
+void onMessage(websockets::WebsocketsClient &client, websockets::WebsocketsMessage message) {
   DeserializationError error = deserializeJson(doc, message.data());
   if (error) {
     return;
@@ -62,7 +61,7 @@ void handleWsServer(void) {
     // if there is a client that wants to connect
     if (wsServer.poll()) {
       // accept the connection and register callback
-      WebsocketsClient client = wsServer.accept();
+      websockets::WebsocketsClient client = wsServer.accept();
       client.onMessage(onMessage);
       sendConfig(&client);
       // store it for later use
@@ -81,18 +80,9 @@ void pollAllClients() {
   for (auto &client : allClients) {
     client.poll();
   }
-
-  // static String lastColor;
-  // String currentColor = _leds->color();
-  // if (lastColor != currentColor) {
-  //   lastColor = currentColor;
-  //   for (auto &client : allClients) {
-  //     client.send(currentColor);
-  //   }
-  // }
 }
 
-void sendConfig(WebsocketsClient *client){
+void sendConfig(websockets::WebsocketsClient *client){
 
   doc.clear();
 

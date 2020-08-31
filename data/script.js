@@ -6,29 +6,17 @@ fas fa-toggle-on
 
 var colorPicker = null;
 var socket;
-let connectCounter = 0;
-let lastColorSended;
-
 let element;
 
 const table = {
-  time: [100, 200, 500, 1000, 0],
-  angle: [0, 180, 120, 90, 60, 30, 1],
-  duty: [0.1, 0.5, 1],
-};
-
-var syncColor = function () {
-  let color = colorPicker.color.hsl;
-  if (color === lastColorSended) {
-    return;
-  }
-  lastColorSended = color;
-  sendToDevice({ hsl: color });
+  time: [0, 1000, 500, 200, 100],
+  angle: [0, 180, 120, 90, 60, 1],
+  duty: [1, 0.5, 0.1],
 };
 
 var setBtnColor = function (btn) {
   colorPicker.color.rgbString = btn.style.backgroundColor;
-  syncColor();
+  sendToDevice({ hsl: colorPicker.color.hsl });
 };
 
 // Handle any errors that occur.
@@ -42,38 +30,45 @@ var onOpen = function (event) {
 };
 
 var createInterface = function () {
-  if (!colorPicker) {
-    colorPicker = new iro.ColorPicker(".colorPicker", {
-      id: "elementColorPicker",
-      width: 300,
-      borderWidth: 2,
-      borderColor: "#fff",
-      handleRadius: 15,
-      layout: [
-        {
-          component: iro.ui.Slider,
-          options: {
-            sliderType: "hue",
-          },
-        },
-        {
-          component: iro.ui.Slider,
-          options: {
-            sliderType: "saturation",
-          },
-        },
-        {
-          component: iro.ui.Slider,
-          options: {
-            sliderType: "value",
-          },
-        },
-      ],
-    });
+  element = {
+    status: document.getElementById("status"),
+    colorPicker: document.getElementById("colorPicker"),
+    time: document.getElementById("timeSlider"),
+    angle: document.getElementById("angleSlider"),
+    duty: document.getElementById("dutySlider"),
+  };
 
-    colorPicker.on(["input:change"], syncColor);
-  }
+  colorPicker = new iro.ColorPicker(element.colorPicker, {
+    id: "elementColorPicker",
+    width: 300,
+    borderWidth: 2,
+    borderColor: "#fff",
+    handleRadius: 15,
+    layout: [
+      {
+        component: iro.ui.Slider,
+        options: {
+          sliderType: "hue",
+        },
+      },
+      {
+        component: iro.ui.Slider,
+        options: {
+          sliderType: "saturation",
+        },
+      },
+      {
+        component: iro.ui.Slider,
+        options: {
+          sliderType: "value",
+        },
+      },
+    ],
+  });
 
+  colorPicker.on(["input:change"], function () {
+    sendToDevice({ hsl: colorPicker.color.hsl });
+  });
   element.time.addEventListener("input", function () {
     sendToDevice({ time: Number(table.time[this.value]) });
   });
@@ -110,8 +105,7 @@ var onMessage = function (event) {
 
 // Show a disconnected message when the WebSocket is closed.
 var onClose = function (event) {
-  element.status.innerHTML =
-    "Desconectado." + connectCounter++ + " Erro:" + event.code;
+  element.status.innerHTML = "Desconectado.";
   setTimeout(connect(), 5000);
 };
 
@@ -150,13 +144,6 @@ var sendToDevice = function (msg) {
 };
 
 function runScript() {
-  element = {
-    time: document.getElementById("timeSlider"),
-    angle: document.getElementById("angleSlider"),
-    duty: document.getElementById("dutySlider"),
-    status: document.getElementById("status"),
-  };
-
   createInterface();
   connect();
 }
