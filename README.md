@@ -8,13 +8,15 @@ On devices that work with a ".local" domain, the page can be loaded by name. For
 
 The web page is served by ESP8266 on TCP port 80.
 
-To ensure agility, the interaction of the color selection is done using websockts on TCP port 81.
+To ensure agility, the interaction of the color selection is done using [websockets](https://github.com/gilmaimon/ArduinoWebsockets) on TCP port 81 and messagens in [JSON](https://github.com/bblanchon/ArduinoJson) format.
 
 The firmware accepts updating using OTA on port 82 or via the serial interface.
 
 The Project was made using the [Visual Code IDE](https://code.visualstudio.com/download), [Platformio](https://platformio.org/install/ide?install=vscode) and [Arduino Framework](https://docs.platformio.org/en/latest/platforms/espressif8266.html) for Espressif ESP8266;
 
 The color Picker uses the lib available at [https://github.com/jaames/iro.js](https://github.com/jaames/iro.js)
+
+For [RGB/HSL]((https://github.com/marcio-cp/cocoa-press-marlin/blob/master/Marlin/src/lcd/extui/lib/ftdi_eve_touch_ui/ftdi_eve_lib/extended/rgb_t.h)) conversion routines: credits to [Marcio Teixeira](https://github.com/marcio-cp)
 
 [![Operation 1](http://img.youtube.com/vi/vLKXMp9dhpw/0.jpg)](https://youtu.be/vLKXMp9dhpw)
 
