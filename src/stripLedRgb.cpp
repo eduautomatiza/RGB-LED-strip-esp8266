@@ -9,9 +9,24 @@ stripLedRgb::stripLedRgb() {
   _red_factor = 4;
   _green_factor = 2;
   _blue_factor = 1.2;
+
+  _invert = false;
 }
 
-stripLedRgb::stripLedRgb(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue) {
+stripLedRgb::stripLedRgb(bool invert) {
+  _pin_red = -1;
+  _pin_green = -1;
+  _pin_blue = -1;
+  _duty_cycle = 1;
+
+  _red_factor = 4;
+  _green_factor = 2;
+  _blue_factor = 1.2;
+
+  _invert = invert;
+}
+
+stripLedRgb::stripLedRgb(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue, bool invert) {
   _pin_red = pin_red;
   _pin_green = pin_green;
   _pin_blue = pin_blue;
@@ -20,6 +35,8 @@ stripLedRgb::stripLedRgb(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue) {
   _red_factor = 4;
   _green_factor = 2;
   _blue_factor = 1.2;
+
+  _invert = invert;
 }
 
 stripLedRgb::~stripLedRgb() {}
@@ -52,27 +69,34 @@ void stripLedRgb::duty_cycle(float duty_cycle) { _duty_cycle = duty_cycle; }
 void stripLedRgb::angle_step(float angle_step) { _angle_step = angle_step; }
 
 void stripLedRgb::begin() {
-  begin(_pin_red, _pin_green, _pin_blue, DEFAULT_PWM_RGB_FREQUENCY);
+  begin(_pin_red, _pin_green, _pin_blue, DEFAULT_PWM_RGB_FREQUENCY, _invert);
 }
 
 void stripLedRgb::begin(uint32_t frequency_hz) {
-  begin(_pin_red, _pin_green, _pin_blue, frequency_hz);
+  begin(_pin_red, _pin_green, _pin_blue, frequency_hz, _invert);
 }
 
-void stripLedRgb::begin(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue) {
-  begin(pin_red, pin_green, pin_blue, DEFAULT_PWM_RGB_FREQUENCY);
+void stripLedRgb::begin(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue, bool invert) {
+  begin(pin_red, pin_green, pin_blue, DEFAULT_PWM_RGB_FREQUENCY, invert);
 }
 
 void stripLedRgb::begin(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue,
-                        uint32_t frequency_hz) {
+                        uint32_t frequency_hz, bool invert) {
   _pin_red = pin_red;
   _pin_green = pin_green;
   _pin_blue = pin_blue;
 
-  digitalWrite(_pin_red, 0);
-  digitalWrite(_pin_green, 0);
-  digitalWrite(_pin_blue, 0);
+  _invert = invert;
 
+  if (_invert) {
+    digitalWrite(_pin_red, 1);
+    digitalWrite(_pin_green, 1);
+    digitalWrite(_pin_blue, 1);
+  } else {
+    digitalWrite(_pin_red, 0);
+    digitalWrite(_pin_green, 0);
+    digitalWrite(_pin_blue, 0);
+  }
   pinMode(_pin_red, OUTPUT);
   pinMode(_pin_green, OUTPUT);
   pinMode(_pin_blue, OUTPUT);
@@ -109,6 +133,11 @@ void stripLedRgb::handle() {
       analogWrite(_pin_red, 0);
       analogWrite(_pin_green, 0);
       analogWrite(_pin_blue, 0);
+      if (_invert) {
+        digitalWrite(_pin_red, 1);
+        digitalWrite(_pin_green, 1);
+        digitalWrite(_pin_blue, 1);
+      }      
     }
     return;
   }
@@ -118,7 +147,13 @@ void stripLedRgb::handle() {
   }
 
   _last_rgb = _rgb;
-  analogWrite(_pin_red, _rgb.r * _red_factor);
-  analogWrite(_pin_green, _rgb.g * _green_factor);
-  analogWrite(_pin_blue, _rgb.b * _blue_factor);
+  if (_invert) {
+    analogWrite(_pin_red, DEFAULT_PWM_RGB_RANGE - _rgb.r * _red_factor);
+    analogWrite(_pin_green, DEFAULT_PWM_RGB_RANGE - _rgb.g * _green_factor);
+    analogWrite(_pin_blue, DEFAULT_PWM_RGB_RANGE - _rgb.b * _blue_factor);
+  } else {
+    analogWrite(_pin_red, _rgb.r * _red_factor);
+    analogWrite(_pin_green, _rgb.g * _green_factor);
+    analogWrite(_pin_blue, _rgb.b * _blue_factor);
+  }
 }

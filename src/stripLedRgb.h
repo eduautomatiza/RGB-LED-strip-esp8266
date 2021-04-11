@@ -13,6 +13,7 @@ class stripLedRgb {
   uint8_t _pin_red, _pin_green, _pin_blue;
   float _hue, _saturation, _lightness;
   float _red_factor, _green_factor, _blue_factor;
+  bool _invert;
   rgb_t _rgb;
   rgb_t _last_rgb;
   float _duty_cycle;
@@ -25,7 +26,8 @@ class stripLedRgb {
   /* data */
  public:
   stripLedRgb();
-  stripLedRgb(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue);
+  stripLedRgb(bool invert);
+  stripLedRgb(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue, bool invert);
   ~stripLedRgb();
 
   void factor(float red, float green, float blue);
@@ -49,9 +51,9 @@ class stripLedRgb {
 
   void begin();
   void begin(uint32_t frequency_hz);
-  void begin(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue);
+  void begin(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue, bool invert);
   void begin(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue,
-             uint32_t frequency_hz);
+             uint32_t frequency_hz, bool invert);
 
   void handle();
 };

@@ -46,15 +46,9 @@ var createInterface = function () {
     handleRadius: 15,
     layout: [
       {
-        component: iro.ui.Slider,
+        component: iro.ui.Wheel,
         options: {
-          sliderType: "hue",
-        },
-      },
-      {
-        component: iro.ui.Slider,
-        options: {
-          sliderType: "saturation",
+          wheelLightness: false,
         },
       },
       {
