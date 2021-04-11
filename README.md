@@ -24,6 +24,8 @@ For [RGB/HSL](https://github.com/marcio-cp/cocoa-press-marlin/blob/master/Marlin
 
 ![Browser Interface](./doc/interface.png)
 
+![schematics](./doc/led-strip.png)
+
 ![botton](./doc/botton.jpg)
 
 ![top1](./doc/top1.jpg)
