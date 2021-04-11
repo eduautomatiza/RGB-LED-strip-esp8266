@@ -13,3 +13,18 @@ To ensure agility, the interaction of the color selection is done using websockt
 The firmware accepts updating using OTA on port 82 or via the serial interface.
 
 The color selection disc uses the lib available at [https://github.com/jaames/iro.js](https://github.com/jaames/iro.js)
+
+[![Operation 1](http://img.youtube.com/vi/vLKXMp9dhpw/0.jpg)](https://youtu.be/vLKXMp9dhpw)
+
+[![Operation 2](http://img.youtube.com/vi/u9i37xKtStI/0.jpg)](https://youtu.be/u9i37xKtStI)
+
+![Browser Interface](./doc/interface.png)
+
+![botton](./doc/botton.jpg)
+
+![top1](./doc/top1.jpg)
+
+![top2](./doc/top2.jpg)
+
+![connections](./doc/connections.jpg)
+
