@@ -16,7 +16,7 @@ The Project was made using the [Visual Code IDE](https://code.visualstudio.com/d
 
 The color Picker uses the lib available at [https://github.com/jaames/iro.js](https://github.com/jaames/iro.js)
 
-For [RGB/HSL]((https://github.com/marcio-cp/cocoa-press-marlin/blob/master/Marlin/src/lcd/extui/lib/ftdi_eve_touch_ui/ftdi_eve_lib/extended/rgb_t.h)) conversion routines: credits to [Marcio Teixeira](https://github.com/marcio-cp)
+For [RGB/HSL](https://github.com/marcio-cp/cocoa-press-marlin/blob/master/Marlin/src/lcd/extui/lib/ftdi_eve_touch_ui/ftdi_eve_lib/extended/rgb_t.h) conversion routines: credits to [Marcio Teixeira](https://github.com/marcio-cp)
 
 [![Operation 1](http://img.youtube.com/vi/vLKXMp9dhpw/0.jpg)](https://youtu.be/vLKXMp9dhpw)
 
