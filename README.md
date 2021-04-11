@@ -1,6 +1,6 @@
 # RGB-LED-strip-esp8266
 
-This is a project to drive RGB led strips.
+This is a project to drive RGB led strips with ESP8266 (nodeMCU module).
 
 The activation is done through a local web interface.
 
@@ -12,7 +12,9 @@ To ensure agility, the interaction of the color selection is done using websockt
 
 The firmware accepts updating using OTA on port 82 or via the serial interface.
 
-The color selection disc uses the lib available at [https://github.com/jaames/iro.js](https://github.com/jaames/iro.js)
+The Project was made using the [Visual Code IDE](https://code.visualstudio.com/download), [Platformio](https://platformio.org/install/ide?install=vscode) and [Arduino Framework](https://docs.platformio.org/en/latest/platforms/espressif8266.html) for Espressif ESP8266;
+
+The color Picker uses the lib available at [https://github.com/jaames/iro.js](https://github.com/jaames/iro.js)
 
 [![Operation 1](http://img.youtube.com/vi/vLKXMp9dhpw/0.jpg)](https://youtu.be/vLKXMp9dhpw)
 
