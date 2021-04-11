@@ -27,4 +27,3 @@ The color selection disc uses the lib available at [https://github.com/jaames/ir
 ![top2](./doc/top2.jpg)
 
 ![connections](./doc/connections.jpg)
-
