@@ -12,6 +12,15 @@ To ensure agility, the interaction of the color selection is done using [websock
 
 The firmware accepts updating using OTA on port 82 or via the serial interface.
 
+In the platformio.ini file, you can customize your project by adding the code below:
+```
+build_flags = 
+  '-D WIFI_SSID="WIFI-SSID"'
+  '-D WIFI_PASS="WIFI-PASS"'
+  '-D PIO_FRAMEWORK_ARDUINO_LWIP2_HIGHER_BANDWIDTH'
+  '-D PCI_VERSION_2'
+```
+
 The Project was made using the [Visual Code IDE](https://code.visualstudio.com/download), [Platformio](https://platformio.org/install/ide?install=vscode) and [Arduino Framework](https://docs.platformio.org/en/latest/platforms/espressif8266.html) for Espressif ESP8266;
 
 The color Picker uses the lib available at [https://github.com/jaames/iro.js](https://github.com/jaames/iro.js)
