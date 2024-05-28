@@ -26,7 +26,7 @@ class stripLedRgb {
   /* data */
  public:
   stripLedRgb();
-  stripLedRgb(bool invert);
+  explicit stripLedRgb(bool invert);
   stripLedRgb(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue, bool invert);
   ~stripLedRgb();
 

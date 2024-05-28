@@ -78,12 +78,11 @@ void handleMDNS() {
   static unsigned long nextAnnounce = now;
   static unsigned long nextBegin = now;
 
-  static uint8_t countAnnounce = 0;
-
   if (MDNS.isRunning()) {
     MDNS.update();
 
     if (now > nextAnnounce) {
+      static uint8_t countAnnounce = 0;
       if (++countAnnounce < 3) {
         nextAnnounce = now + (countAnnounce * 1000);
       } else {

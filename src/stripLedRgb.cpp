@@ -1,43 +1,25 @@
 #include "stripLedRgb.h"
 
-stripLedRgb::stripLedRgb() {
-  _pin_red = -1;
-  _pin_green = -1;
-  _pin_blue = -1;
-  _duty_cycle = 1;
+stripLedRgb::stripLedRgb() : stripLedRgb(-1, -1, -1, false) {}
 
-  _red_factor = 4;
-  _green_factor = 2;
-  _blue_factor = 1.2;
+stripLedRgb::stripLedRgb(bool invert) : stripLedRgb(-1, -1, -1, invert) {}
 
-  _invert = false;
-}
-
-stripLedRgb::stripLedRgb(bool invert) {
-  _pin_red = -1;
-  _pin_green = -1;
-  _pin_blue = -1;
-  _duty_cycle = 1;
-
-  _red_factor = 4;
-  _green_factor = 2;
-  _blue_factor = 1.2;
-
-  _invert = invert;
-}
-
-stripLedRgb::stripLedRgb(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue, bool invert) {
-  _pin_red = pin_red;
-  _pin_green = pin_green;
-  _pin_blue = pin_blue;
-  _duty_cycle = 1;
-
-  _red_factor = 4;
-  _green_factor = 2;
-  _blue_factor = 1.2;
-
-  _invert = invert;
-}
+stripLedRgb::stripLedRgb(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue, bool invert)
+    : _pin_red(pin_red),
+      _pin_green(pin_green),
+      _pin_blue(pin_blue),
+      _hue(0),
+      _saturation(0),
+      _lightness(0),
+      _red_factor(4),
+      _green_factor(2),
+      _blue_factor(2),
+      _invert(invert),
+      _duty_cycle(1),
+      _time_step(0),
+      _angle_step(0),
+      _end_of_active_time(0),
+      _end_of_inactive_time(0) {}
 
 stripLedRgb::~stripLedRgb() {}
 
