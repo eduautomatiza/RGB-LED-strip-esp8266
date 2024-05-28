@@ -19,7 +19,8 @@ stripLedRgb::stripLedRgb(uint8_t pin_red, uint8_t pin_green, uint8_t pin_blue, b
       _time_step(0),
       _angle_step(0),
       _end_of_active_time(0),
-      _end_of_inactive_time(0) {}
+      _end_of_inactive_time(0),
+      _has_update(false) {}
 
 stripLedRgb::~stripLedRgb() {}
 
@@ -119,7 +120,7 @@ void stripLedRgb::handle() {
         digitalWrite(_pin_red, 1);
         digitalWrite(_pin_green, 1);
         digitalWrite(_pin_blue, 1);
-      }      
+      }
     }
     return;
   }
@@ -138,4 +139,13 @@ void stripLedRgb::handle() {
     analogWrite(_pin_green, _rgb.g * _green_factor);
     analogWrite(_pin_blue, _rgb.b * _blue_factor);
   }
+  _has_update = true;
+}
+
+bool stripLedRgb::hasUpdate() {
+  if (_has_update) {
+    _has_update = false;
+    return true;
+  }
+  return false;
 }

@@ -22,6 +22,7 @@ class stripLedRgb {
 
   uint32_t _end_of_active_time;
   uint32_t _end_of_inactive_time;
+  bool _has_update;
 
   /* data */
  public:
@@ -56,4 +57,5 @@ class stripLedRgb {
              uint32_t frequency_hz, bool invert);
 
   void handle();
+  bool hasUpdate();
 };

@@ -5,21 +5,21 @@
 #include <string>
 #include <tiny_websockets/client.hpp>
 #include <tiny_websockets/server.hpp>
-#include <vector>
 
 #include "ArduinoJson.h"
 
 // a collection of all connected clients
-std::vector<websockets::WebsocketsClient> allClients;
+const size_t maxSocketClients = 16;
+websockets::WebsocketsClient socketClients[maxSocketClients];
 websockets::WebsocketsServer wsServer;
 stripLedRgb *_leds;
 
 #define StaticJsonDocument_length 256
 static StaticJsonDocument<StaticJsonDocument_length> doc;
 
-// this method goes thrugh every client and polls for new messages and events
-void pollAllClients();
-void sendConfig(websockets::WebsocketsClient *client);
+int32_t getFreeSocketClientIndex(void);
+void sendConfigToOneClient(websockets::WebsocketsClient *client);
+void sendConfigAllClientExceptThis(websockets::WebsocketsClient *client);
 
 // this callback is common for all clients, the client that sent that
 // message is the one that gets the echo response
@@ -47,6 +47,7 @@ void onMessage(websockets::WebsocketsClient &client, websockets::WebsocketsMessa
   if (doc.containsKey("duty")) {
     _leds->duty_cycle(doc["duty"]);
   }
+  sendConfigAllClientExceptThis(&client);
 }
 
 int initWsServer(uint16_t ws_port, stripLedRgb *leds) {
@@ -56,34 +57,37 @@ int initWsServer(uint16_t ws_port, stripLedRgb *leds) {
 }
 
 void handleWsServer(void) {
-  // while the server is alive
-  if (wsServer.available()) {
-    // if there is a client that wants to connect
-    if (wsServer.poll()) {
-      // accept the connection and register callback
-      websockets::WebsocketsClient client = wsServer.accept();
-      client.onMessage(onMessage);
-      sendConfig(&client);
-      // store it for later use
-      allClients.push_back(client);
+  // if there is a client that wants to connect
+  if (wsServer.poll()) {
+    // accept the connection and register callback
+    websockets::WebsocketsClient newClient = wsServer.accept();
+    int32_t freeIndex = getFreeSocketClientIndex();
+    if (freeIndex >= 0) {
+      newClient.onMessage(onMessage);
+      socketClients[freeIndex] = newClient;
+      sendConfigToOneClient(&newClient);
+    } else {
+      newClient.close();
     }
-    // check for updates in all clients
-    pollAllClients();
+  }
+  for (size_t i = 0; i < maxSocketClients; i++) {
+    socketClients[i].poll();
+  }
+  if (_leds->hasUpdate()) {
+    sendConfigAllClientExceptThis(nullptr);
   }
 }
 
-void pollAllClients() {
-  if (allClients.empty()) {
-    return;
+int32_t getFreeSocketClientIndex(void) {
+  // If a client in our list is not available, it's connection is closed and
+  // we can use it for a new client.
+  for (size_t i = 0; i < maxSocketClients; i++) {
+    if (!socketClients[i].available()) return i;
   }
-
-  for (auto &client : allClients) {
-    client.poll();
-  }
+  return -1;
 }
 
-void sendConfig(websockets::WebsocketsClient *client){
-
+String getConfigToSend(void) {
   doc.clear();
 
   doc["hsl"]["h"] = _leds->hue();
@@ -96,6 +100,23 @@ void sendConfig(websockets::WebsocketsClient *client){
 
   String msg;
   msg.reserve(128);
-  serializeJson(doc,msg);
-  client->send(msg);
+  serializeJson(doc, msg);
+  return msg;
+}
+
+void sendConfigToOneClient(websockets::WebsocketsClient *client) {
+  String msg = getConfigToSend();
+  if (client->available()) {
+    client->send(msg);
+  }
+}
+
+void sendConfigAllClientExceptThis(websockets::WebsocketsClient *client) {
+  String msg = getConfigToSend();
+  for (size_t i = 0; i < maxSocketClients; i++) {
+    websockets::WebsocketsClient *socketClient = &socketClients[i];
+    if (client != socketClient && socketClient->available()) {
+      socketClient->send(msg);
+    }
+  }
 }
