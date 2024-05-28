@@ -111,17 +111,14 @@ var connect = function () {
   } catch (err) {}
 
   if (!wsHost) {
-    var wsHost = "";
-    let url = new URL(document.URL);
-
-    try {
-      wsHost = JSON.parse(window.atob(url.search.substring(1))).ws;
-    } catch (error) {
-      wsHost = "ws://" + url.host + ":81";
+    if (document.location.protocol === "https:") {
+      var wsHost = "wss://" + document.location.hostname + ":81";
+    } else {
+      var wsHost = "ws://" + document.location.hostname + ":81";
     }
   }
 
-  socket = new WebSocket(wsHost);
+  socket = new WebSocket(wsHost, "json");
   socket.onopen = onOpen;
   socket.onmessage = onMessage;
   socket.onerror = onError;
