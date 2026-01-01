@@ -12,12 +12,7 @@
 #include "webServer.h"
 #include "wsServer.h"
 
-#if PCI_VERSION_1
-#define PIN_RED_LED D7
-#define PIN_GREEN_LED D6
-#define PIN_BLUE_LED D5
-#define RBG_INVERT_LOGIC true
-#elif PCI_VERSION_2
+#if PCI_VERSION_2
 #define PIN_RED_LED D7
 #define PIN_GREEN_LED D8
 #define PIN_BLUE_LED D5
